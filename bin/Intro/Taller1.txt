@@ -1,0 +1,84 @@
+
+
+
+/**
+ * Respuestas 
+ * 
+ * 1. Debe tener el parametro id, e inicializa el id de dicho Thread
+ * 2. el main puede saber preguntandole a cada thread si esta vivo con el metodo is alive o con una variable booleana para saber si ya termino de hacer la suma de su correspondiente fila
+ * 4. La sincronización se requiere al final del proceso cuando se quiere hallar el total de la suma, ya que puede que al intentar hacer la suma de los threads, los mismos no hayan terminado 
+ * de hacer la suma de su correspondiente fila dando como resultado un error
+ * 5. lo que cambia del programa es en el codigo de run porque en vez de sumar el total a la variable suma ahora le suma el total a la variable total
+ * 6. la sincronización se require en el mismo punto que en el programa anterior
+ * 7. vease codigo
+ * @author jg.murillo10
+ *
+ */
+
+public class T extends Thread{
+
+	private static int [][] M; //La matriz que se desea sumar
+//	private static int total = 0; //El total de la suma
+	private static int maximoGlobal=0;
+
+	private int id;
+//	private int suma;
+	private int maximoLocal;
+	public boolean termino;
+
+	public T (int id){
+		this.id=id;
+	}
+
+	private static void crearMatriz ( int n ) {
+		M = new int [n][n];
+		int m = 0;
+		for ( int i = 0; i < n; i++ ) {
+			for ( int j = 0; j < n; j++ ) {
+				M[i][j] = m;
+				m++;
+			}
+		}
+	}
+
+	public void run(){
+		termino=false;
+		maximoLocal=0;
+		for (int i = 0; i < M[id].length; i++) {
+//			total+=M[id][i];
+			if(M[id][i]>=maximoLocal){
+				maximoLocal=M[id][i];
+			}
+		}
+		termino=true;
+	}
+
+	public static void main(String[] args) {
+		int nThreads = 10; //Número de threads; un valor cualquiera.
+		T[] t = new T[nThreads];//Vector para los threads
+		crearMatriz( nThreads ); //Inicializar la matriz
+		//A continuación, escribir código para crear los threads
+		
+		for (int i = 0; i < t.length; i++) {
+			t[i]= new T(i);
+			t[i].start();
+		}
+		//A continuación, escribir código para esperar que los threads terminen
+		for (int i = 0; i < t.length; i++) {
+			if(!t[i].termino){
+				i--;
+			}
+		}
+		//y recoger los resultados parciales
+//		for (int i = 0; i < t.length; i++) {
+//			total+=t[i].suma;
+//		}
+		for (int i = 0; i < t.length; i++) {
+			if(t[i].maximoLocal>=maximoGlobal){
+				maximoGlobal=t[i].maximoLocal;
+			}
+		}
+//		System.out.println(total);
+		System.out.println( maximoGlobal );
+	}
+}
