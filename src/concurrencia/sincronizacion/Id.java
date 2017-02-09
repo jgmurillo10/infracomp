@@ -5,7 +5,7 @@ public class Id {
 	public Id(){
 		id=0;
 	}
-	public synchronized int getId(){
+	public  int getId(){
 		return id++;
 	}
 	public int getIdActual(){

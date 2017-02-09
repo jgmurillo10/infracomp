@@ -7,11 +7,9 @@ public class T extends Thread{
 	private static int [][] matriz;
 	private static int maximoLocal;
 	private Id id;
-	private int idNum;
 	public static Maximo max;
 	public T (Id id){
 		this.id=id;
-		this.idNum=id.getId();
 	}
 	public static void inicializar( int tam){
 		matriz = new int[tam][tam];
@@ -35,8 +33,9 @@ public class T extends Thread{
 	}
 	@Override
 	public void run() {
+		int iActual=id.getId();
 		for (int i = 0; i < matriz.length; i++) {
-			int iActual=idNum;
+			
 			System.out.println(iActual+" iActual "+ i+": ite");
 			if(maximoLocal<matriz[iActual][i]){
 				maximoLocal=matriz[iActual][i];
